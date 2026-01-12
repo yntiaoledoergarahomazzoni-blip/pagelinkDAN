@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha sua Experiência</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* ========== PRÉ-PAGE (SELEÇÃO) ========== */
+        #selection-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .selection-header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .selection-header h1 {
+            color: #fff;
+            font-size: clamp(24px, 5vw, 36px);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .selection-header p {
+            color: #a0a0a0;
+            font-size: clamp(14px, 3vw, 18px);
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 320px));
+            gap: 30px;
+            justify-content: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .company-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .company-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .company-card:hover::before {
+            opacity: 1;
+        }
+
+        .company-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .company-card.macicado:hover {
+            border-color: #bf2c2c;
+            box-shadow: 0 20px 40px rgba(191, 44, 44, 0.3);
+        }
+
+        .company-card.dandocorte:hover {
+            border-color: #d4af37;
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            overflow: hidden;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .company-card:hover .avatar {
+            transform: scale(1.1);
+        }
+
+        .company-card.macicado:hover .avatar {
+            border-color: #bf2c2c;
+            box-shadow: 0 0 30px rgba(191, 44, 44, 0.5);
+        }
+
+        .company-card.dandocorte:hover .avatar {
+            border-color: #d4af37;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .company-segment {
+            font-size: 16px;
+            color: #a0a0a0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* ========== PAGE LINK - MACICADO ========== */
+        #macicado-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #3d1b1b 100%);
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        #macicado-page .container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .brand-logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #bf2c2c, #dd4e4e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: #fff;
+            font-weight: 900;
+            box-shadow: 0 10px 30px rgba(191, 44, 44, 0.4);
+        }
+
+        .brand-name {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .brand-tagline {
+            font-size: 16px;
+            color: #d99c9c;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .link-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 2px solid rgba(191, 44, 44, 0.3);
+            color: #fff;
+            padding: 18px 30px;
+            border-radius: 15px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(123, 44, 191, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .link-btn:hover::before {
+            left: 100%;
+        }
+
+        .link-btn:hover {
+            background: rgba(191, 44, 44, 0.2);
+            border-color: #bf2c2c;
+            transform: translateX(5px);
+        }
+
+        .link-btn i {
+            font-size: 20px;
+        }
+.brand-logo {
+    overflow: hidden;
+}
+
+.brand-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+        /* ========== PAGE LINK - DAN DO CORTE ========== */
+        #dandocorte-page {
+            display: none;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2416 100%);
+            padding: 40px 20px;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        #dandocorte-page .container {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        #dandocorte-page .brand-logo {
+            background: linear-gradient(135deg, #d4af37, #f4e4a6);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+        }
+
+        #dandocorte-page .brand-name {
+            color: #d4af37;
+        }
+
+        #dandocorte-page .brand-tagline {
+            color: #c9b990;
+        }
+
+        #dandocorte-page .link-btn {
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        #dandocorte-page .link-btn::before {
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+        }
+
+        #dandocorte-page .link-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: #d4af37;
+        }
+
+        /* ========== ANIMAÇÕES ========== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ========== RESPONSIVIDADE ========== */
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+            }
+
+            .brand-name {
+                font-size: 32px;
+            }
+
+            .brand-logo {
+                width: 120px;
+                height: 120px;
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== PRÉ-PAGE (SELEÇÃO) ========== -->
+    <div id="selection-page">
+        <div class="selection-header">
+            <h1>Escolha qual empresa você deseja acessar</h1>
+            <p>Duas marcas, experiências diferentes</p>
+        </div>
+
+        <div class="cards-container">
+            <!-- Card Macicado -->
+            <div class="company-card macicado" onclick="selectCompany('macicado')">
+                <div class="avatar">
+                    <img src="assets/img/logomacicado.jpg" alt="Macicado">
+                </div>
+                <h2 class="company-name">Macicado</h2>
+                <p class="company-segment">Headshop</p>
+            </div>
+
+            <!-- Card Dan do Corte -->
+            <div class="company-card dandocorte" onclick="selectCompany('dandocorte')">
+                <div class="avatar">
+                    <img src="assets/img/logodandocorte.jpg" alt="Dan do Corte">
+                </div>
+                <h2 class="company-name">Dan do Corte</h2>
+                <p class="company-segment">Barbearia</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PAGE LINK - MACICADO ========== -->
+    <div id="macicado-page">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <div class="container">
+            <div class="brand-logo">
+    <img src="assets/img/pagelogomacicado.jpg" alt="Logo Macicado">
+</div>
+
+            <h1 class="brand-name">Macicado</h1>
+            <p class="brand-tagline">Sua experiência alternativa começa aqui. Acessórios de respeito, visão de rua e entrega sem caô.
+Macicado é pra quem vive o corre.</p>
+
+            <div class="links-container">
+                <a href="https://instagram.com/macicadoheadshop" class="link-btn" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                    Instagram
+                </a>
+
+                <a href="https://wa.me/5511988739708?text=Olá! Vim do Page Link" class="link-btn" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp / Catálogo
+                </a>
+
+                <a href="https://www.ifood.com.br/delivery/sao-paulo-sp/macicado-headshop-e-tabacaria-conjunto-habitacional-inacio-monteiro/59ea5e10-1b54-417d-bf59-6faf84bd7ebc?UTM_Medium=share&utm_source=ig&utm_medium=social&utm_content=link_in_bio" class="link-btn" target="_blank">
+                    <i class="fas fa-motorcycle"></i>
+
+                    Peça no iFood
+                </a>
+
+                <a href="https://maps.app.goo.gl/1jym3cZh3GXzZiP38?g_st=ipc" class="link-btn" target="_blank">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Localização
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PAGE LINK - DAN DO CORTE ========== -->
+    <div id="dandocorte-page">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+
+        <div class="container">
+            <div class="brand-logo">
+    <img src="assets/img/pagelogodandocorte.jpg" alt="Logo Dan do Corte">
+</div>
+
+            <h1 class="brand-name">Dan do Corte</h1>
+            <p class="brand-tagline">Corte na régua, visão de cria e respeito em cada detalhe.
+Aqui o estilo é levado a sério.✂️🔥</p>
+
+            <div class="links-container">
+                <a href="https://wa.me/5511988888888?text=Olá! Gostaria de agendar" class="link-btn" target="_blank">
+                    <i class="fas fa-calendar-check"></i>
+                    Agendar Horário
+                </a>
+
+                <a href="https://www.instagram.com/macicadoheadshop" class="link-btn" target="_blank">
+                    <i class="fas fa-globe"></i>
+
+                    Conheça o Headshop
+                </a>
+
+                <a href="https://instagram.com/dan.docorte011" class="link-btn" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                    Instagram
+                </a>
+
+                <a href="https://maps.app.goo.gl/PXAWXt3Rkh1CxvJ58?g_st=ipc" class="link-btn" target="_blank">
+                    <i class="fas fa-map-marker-alt"></i>
+                    Localização
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONTROLE DE NAVEGAÇÃO ==========
+        
+        // Verifica se há uma escolha salva no localStorage
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedChoice = localStorage.getItem('selectedCompany');
+            if (savedChoice) {
+                // Opcional: pode carregar automaticamente a última escolha
+                // selectCompany(savedChoice);
+            }
+        });
+
+        /**
+         * Função para selecionar uma empresa
+         * @param {string} company - 'macicado' ou 'dandocorte'
+         */
+        function selectCompany(company) {
+            // Salva a escolha no localStorage
+            localStorage.setItem('selectedCompany', company);
+
+            // Oculta a página de seleção
+            document.getElementById('selection-page').style.display = 'none';
+
+            // Exibe a página correspondente
+            if (company === 'macicado') {
+                document.getElementById('macicado-page').style.display = 'block';
+            } else if (company === 'dandocorte') {
+                document.getElementById('dandocorte-page').style.display = 'block';
+            }
+
+            // Scroll para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /**
+         * Função para voltar à página de seleção
+         */
+        function goBack() {
+            // Oculta todas as páginas de empresa
+            document.getElementById('macicado-page').style.display = 'none';
+            document.getElementById('dandocorte-page').style.display = 'none';
+
+            // Exibe a página de seleção
+            document.getElementById('selection-page').style.display = 'flex';
+
+            // Scroll para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ========== PERSONALIZAÇÃO RÁPIDA ==========
+        
+        /*
+         * Para personalizar, edite os seguintes elementos:
+         * 
+         * IMAGENS DOS AVATARES:
+         * - Substitua os URLs nas tags <img> dos avatares
+         * 
+         * TEXTOS:
+         * - Edite diretamente no HTML as classes .company-name, .brand-name, etc.
+         * 
+         * LINKS:
+         * - Altere os atributos href="" dos links <a>
+         * - WhatsApp: substitua o número 5511999999999
+         * 
+         * CORES:
+         * - Macicado: busque por #7b2cbf e #9d4edd no CSS
+         * - Dan do Corte: busque por #d4af37 e #f4e4a6 no CSS
+         * 
+         * LOGOS:
+         * - Altere o conteúdo das divs .brand-logo (atualmente "M" e "D")
+         * - Ou substitua por <img src="logo.png"> para usar imagens
+         */
+    </script>
+
+</body>
+</html>
